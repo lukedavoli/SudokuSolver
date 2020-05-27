@@ -18,7 +18,7 @@ public class BackTrackingSolver extends StdSudokuSolver
     String[] symbols;
 
     public BackTrackingSolver() {
-        // TODO: any initialisation you want to implement.
+        
     } // end of BackTrackingSolver()
 
 
