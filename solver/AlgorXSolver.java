@@ -70,19 +70,19 @@ public class AlgorXSolver extends StdSudokuSolver
                                                  ecmCoveredRowsF.length);
         boolean[] ecmCoveredCols = Arrays.copyOf(ecmCoveredColsF, 
                                                  ecmCoveredColsF.length);
-
+        
+        if(allRowsCovered(ecmCoveredRows) && allColsCovered(ecmCoveredCols))
+        {
+            return true;
+        }
+        else if(allRowsCovered(ecmCoveredRows) && !allColsCovered(ecmCoveredCols))
+        {
+            return false;
+        }
+        
         //Iterate through all remaining rows in the matrix
         for(int mr = 0; mr < ecmCoveredRows.length; mr++)
         {
-            if(allRowsCovered(ecmCoveredRows) && allColsCovered(ecmCoveredCols))
-            {
-                return true;
-            }
-            else if(allRowsCovered(ecmCoveredRows) && !allColsCovered(ecmCoveredCols))
-            {
-                return false;
-            }
-
             if(!ecmCoveredRows[mr])
             {
                 solution.add(mr);

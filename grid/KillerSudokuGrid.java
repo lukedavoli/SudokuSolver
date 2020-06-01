@@ -6,7 +6,6 @@ package grid;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import grid.Cage;
 
 
 /**
