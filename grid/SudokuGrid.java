@@ -88,6 +88,7 @@ public abstract class SudokuGrid
 		return symbols;
     }
     
+    //Upon completion of the board ensure every cell has a value
     public boolean validateCells() 
     {
         String currCell = "";
@@ -102,6 +103,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Iterate through each column to ensure each is valid
     public boolean validateAllColumns() 
     {
         for (int col = 0; col < dimensions; col++) 
@@ -114,6 +116,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Ensure all values in a column are unique
     public boolean validateColumn(int col)
     {
         ArrayList<String> colVals = new ArrayList<>();
@@ -130,6 +133,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Iterate through each row to ensure each is valid
     public boolean validateAllRows()
     {
         for (int row = 0; row < dimensions; row++) 
@@ -142,6 +146,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Ensure all values in a row are unique
     public boolean validateRow(int row)
     {
         ArrayList<String> rowVals = new ArrayList<>();
@@ -158,6 +163,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Iterate through each block to ensure each is valid
     public boolean validateAllBlocks() 
     {
         for (int bRow = 0; bRow < bDim; bRow++)
@@ -173,6 +179,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Ensure all values in a block are unique
     public boolean validateBlock(int bRow, int bCol)
     {
         ArrayList<String> blockVals = new ArrayList<>();
@@ -193,6 +200,7 @@ public abstract class SudokuGrid
         return true;
     }
 
+    //Give a cell in the grid a particular value
     public void setGridCell(int row, int col, String symbol)
     {
         board[row][col] = symbol;

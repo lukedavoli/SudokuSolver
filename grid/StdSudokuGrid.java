@@ -28,8 +28,9 @@ public class StdSudokuGrid extends SudokuGrid
     /* ********************************************************* */
 
 
-    @Override
-    public void initGrid(String filename) throws FileNotFoundException, IOException {
+    @Override //Create the grid based on information from file
+    public void initGrid(String filename) throws FileNotFoundException, IOException 
+    {
         File gridInitFile = new File(filename);
         Scanner scanner = new Scanner(gridInitFile);
 
@@ -49,9 +50,9 @@ public class StdSudokuGrid extends SudokuGrid
         scanner.close();
     }
 
-    @Override
-    public void outputGrid( String filename) throws FileNotFoundException, IOException {
-         FileWriter writer = new FileWriter(filename);
+    @Override //Write grid to file
+    public void outputGrid(String filename) throws FileNotFoundException, IOException {
+        FileWriter writer = new FileWriter(filename);
 
         for (int row = 0; row < dimensions; row++)
          {
@@ -74,10 +75,10 @@ public class StdSudokuGrid extends SudokuGrid
         writer.close();
     }
 
-    @Override
+    @Override //String representation of grid
     public String toString() 
     {
-         StringBuilder gridSB = new StringBuilder();
+        StringBuilder gridSB = new StringBuilder();
         for (int row = 0; row < dimensions; row++) 
         {
             for (int col = 0; col < dimensions; col++) 
@@ -103,8 +104,6 @@ public class StdSudokuGrid extends SudokuGrid
     @Override
     public boolean validate() 
     {
-        // TODO: untested and most likely incomplete
-
         if (!validateCells()) {
             return false;
         } else if (!validateAllRows()) {

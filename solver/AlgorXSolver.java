@@ -64,11 +64,14 @@ public class AlgorXSolver extends StdSudokuSolver
     private boolean solveECMatrix(boolean[] ecmCoveredRowsF,
                                   boolean[] ecmCoveredColsF) 
     {
+        //Create copies of the lists of covered rows and columns so not to alter lists
+        //  from previous call
         boolean[] ecmCoveredRows = Arrays.copyOf(ecmCoveredRowsF,
                                                  ecmCoveredRowsF.length);
         boolean[] ecmCoveredCols = Arrays.copyOf(ecmCoveredColsF, 
                                                  ecmCoveredColsF.length);
 
+        //Iterate through all remaining rows in the matrix
         for(int mr = 0; mr < ecmCoveredRows.length; mr++)
         {
             if(allRowsCovered(ecmCoveredRows) && allColsCovered(ecmCoveredCols))

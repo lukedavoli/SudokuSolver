@@ -25,6 +25,7 @@ public class BackTrackingSolver extends StdSudokuSolver
     @Override
     public boolean solve(SudokuGrid grid) 
     {
+        //Get information on grid
         this.gDim = grid.getDimensions();
         this.bDim = grid.getBDim();
         this.board = grid.getBoard();
