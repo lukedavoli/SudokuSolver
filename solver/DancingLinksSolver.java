@@ -49,47 +49,78 @@ public class DancingLinksSolver extends StdSudokuSolver
         //construct the ECMatrix and cover values already in the grid
         constructECMatrix();
         coverExistingValues();
-        head = constructDancingLinks(ecMatrix);
-        boolean solved = solve(0);
+        head = constructDancingLinks();
+        boolean solved = solve();
+
+        for(int i = 0; i < solution.size(); i++)
+        {
+            int r = 0;
+            int c = 0;
+            int v = 0;
+            ECMNode solNode = solution.get(i);
+            ECMNode nodeInSol = solNode;
+            do
+            {
+                int ecmCol = Integer.parseInt(nodeInSol.col.name);
+                if(ecmCol < dimSquared)
+                {
+                    r = matrixColToV1(ecmCol);
+                    c = matrixColToV2(ecmCol);
+                }
+                if(ecmCol >= dimSquared)
+                {
+                    v = matrixColToV2(ecmCol);
+                } 
+                nodeInSol = nodeInSol.right;
+            }
+            while(nodeInSol != solNode);
+
+            grid.setGridCell(r - 1, c - 1, symbols[v - 1]);
+        }
 
         return solved;
     } // end of solve()
 
-    private boolean solve(int call){
-        if (head.right == head)
+    private boolean solve()
+    {
+        if(head.right == head)
         {
             return true;
-        } 
+        }
         else
         {
-            ColNode nextCol = (ColNode) head.right;
-            nextCol.coverNode();
+            ColNode columnNode = (ColNode) head.right;
+            columnNode.coverNode();
 
-            for(ECMNode r = nextCol.down; r != nextCol; r = r.down)
+            for(ECMNode nodeInCol = columnNode.down; nodeInCol != columnNode; 
+                nodeInCol = nodeInCol.down)
             {
-                solution.add(r);
+                solution.add(nodeInCol);
 
-                for(ECMNode c = r.right; c != r; c = c.right)
+                for(ECMNode nodeInRow = nodeInCol.right; nodeInRow != nodeInCol;
+                    nodeInRow = nodeInRow.right)
                 {
-                    c.col.coverNode();
+                    nodeInRow.col.coverNode();
                 }
 
-                if(solve(call + 1))
+                if(solve())
                 {
                     return true;
                 }
-
-                r = solution.remove(solution.size() - 1);
-                nextCol = r.col;
-
-                for(ECMNode c = r.left; c != r; c = c.left)
+                else
                 {
-                    c.col.uncoverNode();
+                    solution.remove(nodeInCol);
+                    columnNode = nodeInCol.col;
+                    for(ECMNode nodeToLeft = nodeInCol.left; nodeToLeft != nodeInCol;
+                        nodeToLeft = nodeToLeft.left)
+                    {
+                        nodeToLeft.col.uncoverNode();
+                    }
                 }
             }
-            nextCol.uncoverNode();
-            return false;
+            columnNode.uncoverNode();
         }
+        return false;
     }
 
     //generate the exact cover matrix
@@ -280,7 +311,7 @@ public class DancingLinksSolver extends StdSudokuSolver
         return coveredCols;
     }
 
-    private ColNode constructDancingLinks(boolean[][] grid)
+    private ColNode constructDancingLinks()
     {
         ColNode head = new ColNode("H");
         ArrayList<ColNode> colNodes = new ArrayList<>();
@@ -288,10 +319,15 @@ public class DancingLinksSolver extends StdSudokuSolver
         ColNode lastNode = head;
         for(int c = 0; c < dimSquared * CONSTRAINTS; c++)
         {
-            ColNode nextColNode = new ColNode(Integer.toString(c));
-            colNodes.add(nextColNode);
-            lastNode.linkNewRight(nextColNode);
-            lastNode = nextColNode;
+            if(!ecmCoveredCols[c])
+            {
+                ColNode nextColNode = new ColNode(Integer.toString(c));
+                colNodes.add(nextColNode);
+                lastNode.linkNewRight(nextColNode);
+                head.size++;
+                lastNode = nextColNode;
+            }
+            
         }
 
         for(int r = 0; r < dimCubed; r++)
@@ -299,9 +335,18 @@ public class DancingLinksSolver extends StdSudokuSolver
             ECMNode lastNodeAdded = null;
             for(int c = 0; c < dimSquared * CONSTRAINTS; c++)
             {
-                if(ecMatrix[r][c])
+                if(ecMatrix[r][c] && (!ecmCoveredRows[r] && !ecmCoveredCols[c]))
                 {
-                    ColNode colOfNewNode = colNodes.get(c);
+                    ColNode colOfNewNode = null;
+                    for(int i = 0; i < colNodes.size(); i++)
+                    {
+                        String name = Integer.toString(c);
+                        if(name.equals(colNodes.get(i).name))
+                        {
+                            colOfNewNode = colNodes.get(i);
+                            break;
+                        }
+                    }
                     ECMNode newNode = new ECMNode(colOfNewNode);
                     if(lastNodeAdded == null)
                     {
@@ -309,12 +354,12 @@ public class DancingLinksSolver extends StdSudokuSolver
                     }
 
                     colOfNewNode.up.linkNewDown(newNode);
+                    lastNodeAdded = lastNodeAdded.linkNewRight(newNode);
                     colOfNewNode.size++;
                 }
             }    
         }
         
-        head.size = dimSquared * CONSTRAINTS;
         return head;
     }
 
