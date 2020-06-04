@@ -37,6 +37,12 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         this.symbols = kGrid.getSymbols();
         this.cages = kGrid.getCages();
 
+        boolean solved = solveRec(kGrid);
+        return solved;
+    } // end of solve()
+
+    private boolean solveRec(SudokuGrid kGrid)
+    {
         String currCell = "";
         for(int row = 0; row < gDim; row++)
         {
@@ -51,7 +57,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
                         {
                             kGrid.setGridCell(row, col, symb);
 
-                            if(solve(kGrid))
+                            if(solveRec(kGrid))
                             {
                                 return true;
                             }
@@ -66,7 +72,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
             }
         }
         return true;
-    } // end of solve()
+    }
 
     private boolean validEntry(String symb, int row, int col) 
     {
