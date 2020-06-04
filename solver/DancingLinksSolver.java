@@ -107,15 +107,13 @@ public class DancingLinksSolver extends StdSudokuSolver
                 {
                     return true;
                 }
-                else
+                
+                solution.remove(nodeInCol);
+                columnNode = nodeInCol.col;
+                for(ECMNode nodeToLeft = nodeInCol.left; nodeToLeft != nodeInCol;
+                    nodeToLeft = nodeToLeft.left)
                 {
-                    solution.remove(nodeInCol);
-                    columnNode = nodeInCol.col;
-                    for(ECMNode nodeToLeft = nodeInCol.left; nodeToLeft != nodeInCol;
-                        nodeToLeft = nodeToLeft.left)
-                    {
-                        nodeToLeft.col.uncoverNode();
-                    }
+                    nodeToLeft.col.uncoverNode();
                 }
             }
             columnNode.uncoverNode();
