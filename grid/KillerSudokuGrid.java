@@ -45,6 +45,7 @@ public class KillerSudokuGrid extends SudokuGrid
 
         int numCages = Integer.parseInt(scanner.nextLine());
 
+        //Load in all cages from file
         while(scanner.hasNextLine())
         {
             String nextCage = scanner.nextLine();
@@ -60,6 +61,7 @@ public class KillerSudokuGrid extends SudokuGrid
                 }
             }
 
+            //Create a new cage based on the total and all cell locations in the cage
             Cage newCage = new Cage(cageTotal, cellLocs);
             cages.add(newCage);
         }
@@ -69,7 +71,7 @@ public class KillerSudokuGrid extends SudokuGrid
     } // end of initBoard()
 
 
-    @Override
+    @Override //Write grid out to file
     public void outputGrid(String filename)
         throws FileNotFoundException, IOException
     {
@@ -97,7 +99,7 @@ public class KillerSudokuGrid extends SudokuGrid
     } // end of outputBoard()
 
 
-    @Override
+    @Override //Convert grid to string for printing to console
     public String toString() {
         StringBuilder gridSB = new StringBuilder();
         for (int row = 0; row < dimensions; row++) 
@@ -123,7 +125,7 @@ public class KillerSudokuGrid extends SudokuGrid
     } // end of toString()
 
 
-    @Override
+    @Override //Ensure grid meets all constraints of a killer sudoku grid
     public boolean validate() {
         if (!validateCells()) {
             return false;
@@ -140,6 +142,7 @@ public class KillerSudokuGrid extends SudokuGrid
         }
     } // end of validate()
 
+    //Iterate through cages and validate each
     private boolean validateAllCages() 
     {
         for(int c = 0; c < cages.size(); c++)
@@ -152,6 +155,7 @@ public class KillerSudokuGrid extends SudokuGrid
         return true;
     }
 
+    //Ensure a cage has values that sum to its total and does not contain any duplicate values
     private boolean validateCage(int c) 
     {
         ArrayList<String> cageVals = new ArrayList<>();
@@ -162,8 +166,9 @@ public class KillerSudokuGrid extends SudokuGrid
         for (String cell : cage.cells) 
         {
             //Get the row and column of the current cell
-            int row = Character.getNumericValue(cell.charAt(0));
-            int col = Character.getNumericValue(cell.charAt(2));
+            String[] xy = cell.split(",");
+            int row = Integer.parseInt(xy[0]);
+            int col = Integer.parseInt(xy[1]);
 
             //Get the value in the current cell
             currCell = board[row][col];

@@ -71,12 +71,16 @@ public class AlgorXSolver extends StdSudokuSolver
         boolean[] ecmCoveredCols = Arrays.copyOf(ecmCoveredColsF, 
                                                  ecmCoveredColsF.length);
         
+        //Exact cover matrix is empty/all rows and columns covered, grid solved
         if(allRowsCovered(ecmCoveredRows) && allColsCovered(ecmCoveredCols))
         {
+            //Solution found
             return true;
         }
+        //All rows in ECM exhausted but column constraints remain
         else if(allRowsCovered(ecmCoveredRows) && !allColsCovered(ecmCoveredCols))
         {
+            //BACKTRACK
             return false;
         }
         
@@ -85,16 +89,20 @@ public class AlgorXSolver extends StdSudokuSolver
         {
             if(!ecmCoveredRows[mr])
             {
+                //Add the next row to the solution and update the matrix by covering satisfied rows and columns
                 solution.add(mr);
                 ArrayList<Integer> colsCovered = coverSatisfiedColumns(ecmCoveredCols, mr);
                 ArrayList<Integer> rowsCovered = coverSatisfiedRows(ecmCoveredRows, mr);
 
+                //Solve recursively
                 if(solveECMatrix(ecmCoveredRows, ecmCoveredCols))
                 {
+                    //Solution found
                     return true;
                 }
                 else
                 {
+                    //Uncover last rows and columns covered
                     for(int r : rowsCovered)
                     {
                         ecmCoveredRows[r] = false;
@@ -103,7 +111,7 @@ public class AlgorXSolver extends StdSudokuSolver
                     {
                         ecmCoveredCols[c] = false;
                     }
-                    // Uncover cols that were covered in this method call
+                    //Remove the row from the solution
                     solution.remove(Integer.valueOf(mr));
                 }
             }

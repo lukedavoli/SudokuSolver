@@ -34,17 +34,21 @@ public class StdSudokuGrid extends SudokuGrid
         File gridInitFile = new File(filename);
         Scanner scanner = new Scanner(gridInitFile);
 
+        //Get dimensions from file and create the board based on them
         dimensions = Integer.parseInt(scanner.nextLine());
         bDim = (int) Math.sqrt(dimensions);
         board = new String[dimensions][dimensions];
 
         symbols = scanner.nextLine().split(" ");
 
+        //Line by line, add exisiting values in the file to the grid
         while (scanner.hasNextLine()) {
             String initValuePos = scanner.nextLine();
-            int row = Character.getNumericValue(initValuePos.charAt(0));
-            int col = Character.getNumericValue(initValuePos.charAt(2));
-            String value = initValuePos.substring(4);
+            String[] posAndVal = initValuePos.split(" ");
+            String[] posXY = posAndVal[0].split(",");
+            int row = Integer.parseInt(posXY[0]);
+            int col = Integer.parseInt(posXY[1]);
+            String value = posAndVal[1];
             board[row][col] = value;
         }
         scanner.close();
@@ -104,6 +108,7 @@ public class StdSudokuGrid extends SudokuGrid
     @Override
     public boolean validate() 
     {
+        //If any of the conditions of a valid standard sudoku grid are violated, return false
         if (!validateCells()) {
             return false;
         } else if (!validateAllRows()) {

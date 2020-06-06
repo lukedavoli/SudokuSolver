@@ -49,9 +49,12 @@ public class DancingLinksSolver extends StdSudokuSolver
         //construct the ECMatrix and cover values already in the grid
         constructECMatrix();
         coverExistingValues();
+        //Construct the dancing links structure based on the exact cover matrix and get reference to head node
         head = constructDancingLinks();
+        //Solve for the solution
         boolean solved = solve();
 
+        //For each node in the solution, convert to a usable value to set in the grid
         for(int i = 0; i < solution.size(); i++)
         {
             int r = 0;
@@ -61,6 +64,8 @@ public class DancingLinksSolver extends StdSudokuSolver
             ECMNode nodeInSol = solNode;
             do
             {
+                //Depending on which constraint is fulfilled by the node, get 
+                //either the row and column or the value that it holds
                 int ecmCol = Integer.parseInt(nodeInSol.col.name);
                 if(ecmCol < dimSquared)
                 {
@@ -83,39 +88,60 @@ public class DancingLinksSolver extends StdSudokuSolver
 
     private boolean solve()
     {
+        //No remaining column nodes, solution found
         if(head.right == head)
         {
             return true;
         }
         else
         {
+            //Choose the smallest column node and cover it
             ColNode columnNode = (ColNode) head.right;
+            int smallestColSize = columnNode.size;
+            ColNode nextNode = (ColNode) columnNode.right;
+            while(nextNode != head)
+            {
+                int nextNodeSize = nextNode.size;
+                if(nextNode.size < smallestColSize)
+                {
+                    smallestColSize = nextNodeSize;
+                    columnNode = nextNode;
+                }
+                nextNode = (ColNode) nextNode.right;
+            }
             columnNode.coverNode();
 
+            //Add all row nodes in the covered column to the solution
             for(ECMNode nodeInCol = columnNode.down; nodeInCol != columnNode; 
                 nodeInCol = nodeInCol.down)
             {
                 solution.add(nodeInCol);
 
+                //Cover all columns for nodes in rows added to the solution
                 for(ECMNode nodeInRow = nodeInCol.right; nodeInRow != nodeInCol;
                     nodeInRow = nodeInRow.right)
                 {
                     nodeInRow.col.coverNode();
                 }
 
+                //solve recursively
                 if(solve())
                 {
+                    //solution found
                     return true;
                 }
                 
+                //Remove the column covered from the solution
                 solution.remove(nodeInCol);
                 columnNode = nodeInCol.col;
+                //Uncover all nodes removed from DLX structure
                 for(ECMNode nodeToLeft = nodeInCol.left; nodeToLeft != nodeInCol;
                     nodeToLeft = nodeToLeft.left)
                 {
                     nodeToLeft.col.uncoverNode();
                 }
             }
+            //Uncover the column node not part of the solution
             columnNode.uncoverNode();
         }
         return false;
@@ -252,6 +278,7 @@ public class DancingLinksSolver extends StdSudokuSolver
         return i + 1;
     }
 
+    //Cover the rows satisfied by a row being covered
     private ArrayList<Integer> coverSatisfiedRows(boolean[] ecmCoveredRows, int rowIndex) 
     {
         ArrayList<Integer> coveredRows = new ArrayList<>();
@@ -309,14 +336,17 @@ public class DancingLinksSolver extends StdSudokuSolver
         return coveredCols;
     }
 
+    //Construct the dancing links structure based on the exact cover matrix
     private ColNode constructDancingLinks()
     {
         ColNode head = new ColNode("H");
         ArrayList<ColNode> colNodes = new ArrayList<>();
 
         ColNode lastNode = head;
+        //Iterate through the columns of exact cover to add columns to DLX structure
         for(int c = 0; c < dimSquared * CONSTRAINTS; c++)
         {
+            //If not covered already create a new column node for it
             if(!ecmCoveredCols[c])
             {
                 ColNode nextColNode = new ColNode(Integer.toString(c));
@@ -328,16 +358,19 @@ public class DancingLinksSolver extends StdSudokuSolver
             
         }
 
+        //Create all row nodes
         for(int r = 0; r < dimCubed; r++)
         {
             ECMNode lastNodeAdded = null;
             for(int c = 0; c < dimSquared * CONSTRAINTS; c++)
             {
+                //If there is a 1 at the current pos in the ECM and it is not covered...
                 if(ecMatrix[r][c] && (!ecmCoveredRows[r] && !ecmCoveredCols[c]))
                 {
                     ColNode colOfNewNode = null;
                     for(int i = 0; i < colNodes.size(); i++)
                     {
+                        //Find the column it is to be added to...
                         String name = Integer.toString(c);
                         if(name.equals(colNodes.get(i).name))
                         {
@@ -345,12 +378,14 @@ public class DancingLinksSolver extends StdSudokuSolver
                             break;
                         }
                     }
+                    //...and add it to the structure
                     ECMNode newNode = new ECMNode(colOfNewNode);
                     if(lastNodeAdded == null)
                     {
                         lastNodeAdded = newNode;
                     }
 
+                    //Link with all relevant nodes and increase column size
                     colOfNewNode.up.linkNewDown(newNode);
                     lastNodeAdded = lastNodeAdded.linkNewRight(newNode);
                     colOfNewNode.size++;

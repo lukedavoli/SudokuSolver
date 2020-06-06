@@ -1,8 +1,6 @@
 package grid;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class Cage 
 {
@@ -27,6 +25,7 @@ public class Cage
         return cells;
     }
 
+    //Convert symbols to integers before generating combos and then assortments
     public void generateAssortments(String[] symbols)
     {
         ArrayList<Integer> iSymbols = new ArrayList<>();
@@ -39,6 +38,7 @@ public class Cage
         generateAssortments();
     }
 
+    //Produce the all possible assortments for all combos for a cage
     private void generateAssortments() 
     {
         for(ArrayList<Integer> combo : cageCombos)
@@ -48,8 +48,10 @@ public class Cage
         }
     }
 
+    //Find all permutations of a combination of numbers
     private void permuteCombo(ArrayList<Integer> combo, int start)
     {
+        //If at last element, nothing left to swap so can be added to assortment
         if(start == combo.size())
         {   
             ArrayList<CellVal> assortment = new ArrayList<>();
@@ -65,6 +67,7 @@ public class Cage
             cageAssortments.add(assortment);
             return;
         }
+        //Swap elements in combo and call recursively to permuteCombo
         for(int i = start; i < combo.size(); i++)
         {
             int temp = combo.get(i);
@@ -79,18 +82,24 @@ public class Cage
         }
     }
 
+    /*Find all possible combinations of unique values which sum to the total
+    * for the cage using the amount of cells in the cage and given symbols
+    */
     private void generateCombos(ArrayList<Integer> symbols, ArrayList<Integer> partial) 
     {
         if(partial == null)
         {
             partial = new ArrayList<>();   
         }
+        //Find the sum of the current subset of the symbols
         int sum = partial.stream().mapToInt(Integer::intValue).sum();
+        //If it matches the total for the cage and uses the right amount of symbols, add it to the list of possible combos
         if(sum == cageTotal && partial.size() == cells.size())
         {
             cageCombos.add(partial);
         }
 
+        //Iterating through each element in the array, recursively check each subset for validity
         for(int i = 0; i < symbols.size(); i++)
         {
             int n = symbols.get(i);

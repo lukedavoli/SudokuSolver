@@ -44,25 +44,32 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
     private boolean solveRec(SudokuGrid kGrid)
     {
         String currCell = "";
+        //Iterate through each row and column of the grid
         for(int row = 0; row < gDim; row++)
         {
             for(int col = 0; col < gDim; col++)
             {
+                //Skip if the cell contains a value, otherwise continue
                 currCell = board[row][col];
                 if(currCell == null)
                 {
+                    //Test all symbols for validity at the current cell
                     for(String symb : symbols)
                     {
                         if(validEntry(symb, row, col))
                         {
+                            //If valid, set the cell
                             kGrid.setGridCell(row, col, symb);
 
+                            //Continue recursively
                             if(solveRec(kGrid))
                             {
+                                //solve recursively
                                 return true;
                             }
                             else
                             {
+                                //If the previous call hit a dead end, undo the last cell set
                                 kGrid.setGridCell(row, col, null);
                             }
                         }
@@ -74,6 +81,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         return true;
     }
 
+    //Test whether or not a symbol can be added at a certain position based on killer sudoku constraints
     private boolean validEntry(String symb, int row, int col) 
     {
         if(!symbInRow(row, symb) &&
@@ -90,10 +98,13 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         }
     }
 
+    //Identify whether or not a symbol is currently present in a box
     private boolean symbInBox(int cellRow, int cellCol, String symb)
     {
+        //Identify the box of the given cell
         int bRow = cellRow / bDim;
         int bCol = cellCol / bDim;
+        //Iterate through all cells in a box and check for the given value
         for(int row = bDim * bRow; row < (bDim * bRow + bDim); row++)
         {
             for(int col = bDim * bCol; col < (bDim * bCol + bDim); col++)
@@ -107,6 +118,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         return false;
     }
 
+    //Identify whether or not a symbol is currently present in a column
     private boolean symbInCol(int col, String symb)
     {
         for(int i = 0; i < gDim; i++)
@@ -119,6 +131,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         return false;
     }
 
+    //Identify whether or not a symbol is currently present in a row
     private boolean symbInRow(int row, String symb) 
     {
         for(int i = 0; i < gDim; i++)
@@ -131,6 +144,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         return false;
     }
 
+    //Identify whether or not a symbol currently exist in the cage of the cell
     private boolean symbInCage(int row, int col, String symb)
     {
         Cage cage = findCage(row, col);
@@ -148,6 +162,7 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
         return false;
     }
     
+    //Identify whether or not the sum produced by a combination of symbols in a cage is valid
     private boolean invalidSum(int row, int col, String symb) 
     {
         Cage cage = findCage(row, col);
@@ -169,20 +184,24 @@ public class KillerBackTrackingSolver extends KillerSudokuSolver
             }
         }
 
+        //If the cage is not yet full but the sum of existing elements surpasses the total, values are invalid
         if(cellsFilled < cageSize && sum > cage.getCageTotal())
         {
             return true;
         }
+        //If the cage is full but the sum does not match the total, it is also invalid
         else if(cellsFilled == cageSize && sum != cage.getCageTotal())
         {
             return true;
         }
+        //Otherwise we are not yet sure the existing elements will be invalid, it is valid for now so continue
         else
         {
             return false;
         }
     }
 
+    //Identify which cage a given cell belongs to
     private Cage findCage(int row, int col)
     {
         for(Cage cage : cages)

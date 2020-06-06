@@ -13,15 +13,18 @@ public class CellVal
         symb = s;
     }
 
-    public int getRow() {
+    public int getRow() 
+    {
         return row;
     }
 
-    public int getCol() {
+    public int getCol() 
+    {
         return col;
     }
 
-    public String getSymb() {
+    public String getSymb() 
+    {
         return symb;
     }
 }

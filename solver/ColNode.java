@@ -13,9 +13,12 @@ public class ColNode extends ECMNode
         col = this;
     }
 
+    //Unlink this node from other nodes, but leave it attached by outgoing pointers
     void coverNode()
     {
+        //Unlink it horizontally
         unlinkHorizontal();
+        //Unlink vertically all row nodes satisfied by the covering of the col node
         ECMNode currColNode = this.down;
         while(currColNode != this)
         {
@@ -30,6 +33,7 @@ public class ColNode extends ECMNode
         }
     }
 
+    //Relink the covered node using its outgoing pointers
     void uncoverNode()
     {
         ECMNode currColNode = this.up;

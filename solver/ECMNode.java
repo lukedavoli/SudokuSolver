@@ -8,6 +8,7 @@ public class ECMNode {
     ECMNode down;
     ColNode col;
 
+    //Constructor for col nodes
     ECMNode()
     {
         left = this;
@@ -16,6 +17,7 @@ public class ECMNode {
         down = this;
     }
 
+    //Constructor for row nodes
     ECMNode(ColNode col)
     {
         left = this;

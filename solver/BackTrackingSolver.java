@@ -32,29 +32,36 @@ public class BackTrackingSolver extends StdSudokuSolver
         this.symbols = grid.getSymbols();
 
         String currCell = "";
+        //Iterate through each row and column of the grid
         for(int row = 0; row < gDim; row++)
         {
             for(int col = 0; col < gDim; col++)
             {
+                //Skip if the cell contains a value, otherwise continue
                 currCell = board[row][col];
                 if(currCell == null)
                 {
+                    //Test all symbols for validity at the current cell
                     for(String symb : symbols)
                     {
                         if(validEntry(symb, row, col))
                         {
+                            //If valid, set the cell
                             grid.setGridCell(row, col, symb);
 
+                            //Continue recursively
                             if(solve(grid))
                             {
                                 return true;
                             }
                             else
                             {
+                                //If the previous call hit a dead end, undo the last cell set
                                 grid.setGridCell(row, col, null);
                             }
                         }
                     }
+                    //BACKTRACK
                     return false;
                 }
             }
@@ -63,6 +70,7 @@ public class BackTrackingSolver extends StdSudokuSolver
 
     } // end of solve()
 
+    //Test whether or not a symbol can be added at a certain position based on standard sudoku constraints
     private boolean validEntry(String symb, int row, int col) 
     {
         if(!symbInRow(row, symb) &&
@@ -77,10 +85,13 @@ public class BackTrackingSolver extends StdSudokuSolver
         }
     }
 
+    //Identify whether or not a symbol is currently present in a box
     private boolean symbInBox(int cellRow, int cellCol, String symb)
     {
+        //Identify the box of the given cell
         int bRow = cellRow / bDim;
         int bCol = cellCol / bDim;
+        //Iterate through all cells in a box and check for the given value
         for(int row = bDim * bRow; row < (bDim * bRow + bDim); row++)
         {
             for(int col = bDim * bCol; col < (bDim * bCol + bDim); col++)
@@ -94,6 +105,7 @@ public class BackTrackingSolver extends StdSudokuSolver
         return false;
     }
 
+    //Identify whether or not a symbol is currently present in a column
     private boolean symbInCol(int col, String symb)
     {
         for(int i = 0; i < gDim; i++)
@@ -106,6 +118,7 @@ public class BackTrackingSolver extends StdSudokuSolver
         return false;
     }
 
+    //Identify whether or not a symbol is currently present in a row
     private boolean symbInRow(int row, String symb) 
     {
         for(int i = 0; i < gDim; i++)
