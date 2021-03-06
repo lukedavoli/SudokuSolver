@@ -43,8 +43,6 @@ public class KillerSudokuGrid extends SudokuGrid
 
         symbols = scanner.nextLine().split(" ");
 
-        int numCages = Integer.parseInt(scanner.nextLine());
-
         //Load in all cages from file
         while(scanner.hasNextLine())
         {
