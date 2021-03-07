@@ -1,13 +1,3 @@
-/*
- * This is the main java file for assignment 2 of RMIT Algorithms & Analysis,
- * 2020 semester 1.
- *
- * The assignment is about implementing and exploring algorithms and
- * data structures for Sudoku and Killer Sudoku.
- *
- * @author Jeffrey Chan & Minyi Li, RMIT 2020
- */
-
 import java.io.*;
 
 import grid.*;
@@ -15,19 +5,19 @@ import solver.*;
 
 
 /**
- * Main class for the Sudoku assignment.  Can run both Sudoku and Killer Sudoku
+ * Main class for the Sudoku solver. Can run both Sudoku and Killer Sudoku
  * solvers.
  *
  * It implements the basic framework for the assignment code.
  * Generally no need to modify this, there are many abstract and non-abstract
  * classes to customise your implementation.
  */
-public class RmitSudoku
+public class Sudoku
 {
     /**
      * Name of class, used in error messages.
      */
-    protected static final String progName = "RmitSudoku";
+    protected static final String progName = "Sudoku";
 
 
     /**
@@ -250,4 +240,4 @@ public class RmitSudoku
         public SudokuSolver solver;
     } // end of class SolverGridPair
 
-} // end of class RmitSudoku
+}
