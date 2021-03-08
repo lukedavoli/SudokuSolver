@@ -1,0 +1,85 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug Backtracking 4x4",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-std-44-01.in sudoku backtracking y outFiles/easy-std-44-01-backtracking.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Backtracking 9x9",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-std-99-01.in sudoku backtracking y outFiles/easy-std-99-01-backtracking.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Backtracking 16x16",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/additionalTests/1616_custom.in sudoku backtracking y outFiles/1616-backtracking.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Algo-X 4x4",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-std-44-01.in sudoku algorx y outFiles/easy-std-44-01-algox.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Algo-X 9x9 custom",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/additionalTests/99_custom_algox.in sudoku algorx y outFiles/99-cust-algox.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug DLX 4x4",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-std-44-01.in sudoku dancing y outFiles/easy-std-44-01-dlx.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug DLX 4x4 custom",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/veasy-std-44-01.in sudoku dancing y outFiles/easy-std-44-01-dlx.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug DLX 9x9",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-std-99-01.in sudoku dancing y outFiles/easy-std-99-01-dlx.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug DLX 9x9 custom",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/additionalTests/99_custom_dlx.in sudoku dancing y outFiles/99_custom_dlx.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Killer Backtracking 4x4",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "samplegames/easy-killer-44-01.in killer backtracking y outFiles/easy-killer-44-backtracking.out"
+        },
+        {
+            "type": "java",
+            "name": "Debug Killer Backtracking 9x9",
+            "request": "launch",
+            "mainClass": "Sudoku",
+            "args": "sampleGames/additionalTests/killer_99.in killer backtracking y outFiles/killer-99-backtracking.out"
+        },
+    ]
+}
