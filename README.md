@@ -1,7 +1,7 @@
 # Sudoku Solver
 A sudoku puzzle solver appplication that applies transform-and-conquer strategies to solve the constraint satisfaction problem of standard and [killer sudoku](https://en.wikipedia.org/wiki/Killer_sudoku) puzzles. 
 
-![console example](https://i.imgur.com/vxQn44V.png)
+![console example](https://i.imgur.com/1RWYiXu.png)
 
 ## Algorithms
 
